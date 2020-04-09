@@ -8,7 +8,7 @@
 [ext_resource path="res://resources/material_function/material_world.tres" type="Resource" id=6]
 [ext_resource path="res://textures/capture_test/depth/Front.tres" type="Texture" id=7]
 
-[sub_resource type="Shader" id=42]
+[sub_resource type="Shader" id=39]
 code = "shader_type spatial;
 render_mode blend_mix,depth_draw_alpha_prepass,cull_back,diffuse_burley,specular_schlick_ggx;
 
@@ -330,8 +330,7 @@ void fragment() {
 }
 "
 
-[sub_resource type="Resource" id=39]
-resource_name = "Sphere Trace Params"
+[sub_resource type="Resource" id=40]
 script = ExtResource( 2 )
 max_steps = 128
 over_relax_factor = 1.4
@@ -353,8 +352,8 @@ base_shader = ExtResource( 1 )
 shader_library = ExtResource( 3 )
 distance_field_function = ExtResource( 5 )
 material_function = ExtResource( 6 )
-generated_shader = SubResource( 42 )
-shader_params = SubResource( 39 )
+generated_shader = SubResource( 39 )
+shader_params = SubResource( 40 )
 uniforms = {
 "depth_texture": ExtResource( 7 )
 }

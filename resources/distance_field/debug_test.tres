@@ -1,13 +1,13 @@
 [gd_resource type="Resource" load_steps=9 format=2]
 
-[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/distance_field.gd" type="Script" id=1]
-[ext_resource path="res://addons/distance_field_studio/shaders/sphere_trace.shader" type="Shader" id=2]
-[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/sphere_trace_params.gd" type="Script" id=3]
-[ext_resource path="res://addons/distance_field_studio/resources/shader_library/distance_field_library.tres" type="Resource" id=4]
-[ext_resource path="res://resources/distance_field_function/revolved_rect.tres" type="Resource" id=5]
+[ext_resource path="res://addons/distance_field_studio/shaders/sphere_trace.shader" type="Shader" id=1]
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/sphere_trace_params.gd" type="Script" id=2]
+[ext_resource path="res://addons/distance_field_studio/resources/shader_library/distance_field_library.tres" type="Resource" id=3]
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/distance_field.gd" type="Script" id=4]
+[ext_resource path="res://resources/distance_field_function/sphere.tres" type="Resource" id=5]
 [ext_resource path="res://resources/material_function/material_world.tres" type="Resource" id=6]
 
-[sub_resource type="Shader" id=15]
+[sub_resource type="Shader" id=1]
 code = "shader_type spatial;
 render_mode blend_mix,depth_draw_alpha_prepass,cull_back,diffuse_burley,specular_schlick_ggx;
 
@@ -59,36 +59,27 @@ varying float fov;
 varying float aspect;
 
 // Generated SDF library
-vec2 modify_revolve(vec3 p, float o) {
-	return vec2( length(p.xz) - o, p.y );
-}
-float dist_rect(vec2 p, vec2 b) {
-	vec2 d = abs(p)-b;
-	return length(max(d,0.0)) + min(max(d.x,d.y),0.0);
+
+float dist_sphere(vec3 p, float r) {
+	return length(p) - r;
 }
 
 // Generated signed distance function
 float sdf(vec3 IN_POSITION) {
 	float OUT_DISTANCE;
-	OUT_DISTANCE = dist_rect(modify_revolve(IN_POSITION, 1.0), vec2(0.5, 0.5));
+	OUT_DISTANCE = dist_sphere(IN_POSITION, 1.0);
 	return OUT_DISTANCE;
 }
 
 // Generated normal library
-vec3 normal_approx(vec3 p, float h) {
-	vec2 k = vec2(1,-1);
-	return normalize(
-		k.xyy * sdf(p + k.xyy * h) +
-		k.yyx * sdf(p + k.yyx * h) +
-		k.yxy * sdf(p + k.yxy * h) +
-		k.xxx * sdf(p + k.xxx * h)
-	);
+vec3 normal_sphere(vec3 p) {
+	return normalize(p);
 }
 
 // Generated normal function
 vec3 normal(vec3 IN_POSITION) {
 	vec3 OUT_NORMAL;
-	OUT_NORMAL = normal_approx(IN_POSITION, 0.001);
+	OUT_NORMAL = normal_sphere(IN_POSITION);
 	return OUT_NORMAL;
 }
 
@@ -319,8 +310,9 @@ void fragment() {
 }
 "
 
-[sub_resource type="Resource" id=16]
-script = ExtResource( 3 )
+[sub_resource type="Resource" id=2]
+resource_name = "Sphere Trace Params"
+script = ExtResource( 2 )
 max_steps = 128
 over_relax_factor = 1.4
 anti_alias_gradient = 1.0
@@ -334,15 +326,15 @@ step_mid_color = Color( 0.66, 0.66, 0.66, 1 )
 step_max_color = Color( 1, 1, 1, 1 )
 
 [resource]
-resource_name = "Revolved Rect"
-script = ExtResource( 1 )
+resource_name = "Debug Test"
+script = ExtResource( 4 )
 update = false
-base_shader = ExtResource( 2 )
-shader_library = ExtResource( 4 )
+base_shader = ExtResource( 1 )
+shader_library = ExtResource( 3 )
 distance_field_function = ExtResource( 5 )
 material_function = ExtResource( 6 )
-generated_shader = SubResource( 15 )
-shader_params = SubResource( 16 )
+generated_shader = SubResource( 1 )
+shader_params = SubResource( 2 )
 uniforms = {
 
 }

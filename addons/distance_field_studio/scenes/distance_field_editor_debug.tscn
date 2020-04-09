@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://addons/distance_field_studio/resources/theme/debug_theme.tres" type="Theme" id=1]
 [ext_resource path="res://addons/distance_field_studio/scenes/distance_field_editor.tscn" type="PackedScene" id=2]
+[ext_resource path="res://resources/distance_field/debug_test.tres" type="Resource" id=3]
 
 [node name="Spatial" type="Control"]
 anchor_right = 1.0
@@ -12,3 +13,4 @@ __meta__ = {
 }
 
 [node name="DistanceFieldEditor" parent="." instance=ExtResource( 2 )]
+distance_field = ExtResource( 3 )
