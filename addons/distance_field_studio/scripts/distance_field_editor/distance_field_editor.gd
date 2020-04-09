@@ -3,8 +3,8 @@ extends Control
 tool
 
 # Public Members
-export(Resource) var shader_library setget set_shader_library
-export(Resource) var distance_field setget set_distance_field
+export(Resource) var shader_library = null setget set_shader_library
+export(Resource) var distance_field = null setget set_distance_field
 
 # Private Members
 var inputs_node: GraphNode
@@ -23,7 +23,7 @@ func set_distance_field(new_distance_field: Resource) -> void:
 		distance_field = null
 	elif new_distance_field is DistanceField and distance_field != new_distance_field:
 		distance_field = new_distance_field
-		update_distance_field()
+	update_distance_field()
 
 # Getters
 func get_tab_container() -> TabContainer:
@@ -49,8 +49,8 @@ func get_outputs_node() -> GraphNode:
 	return null
 
 func get_distance_field_instance() -> DistanceFieldInstance:
-	if has_node('HBoxContainer/VBoxContainer/ViewportContainer/Viewport/DistanceFieldInstance'):
-		return $HBoxContainer/VBoxContainer/ViewportContainer/Viewport/DistanceFieldInstance as DistanceFieldInstance
+	if has_node('HBoxContainer/VBoxContainer/MarginContainer/ViewportContainer/Viewport/DistanceFieldInstance'):
+		return $HBoxContainer/VBoxContainer/MarginContainer/ViewportContainer/Viewport/DistanceFieldInstance as DistanceFieldInstance
 	return null
 
 # Overrides

@@ -344,9 +344,9 @@ func evaluate_graph() -> void:
 		var val = get_input_value(outputs_node, i)
 
 		if not val or 'Null' in val:
-			distance_field.get(target_resource).set(output_properties[i], '')
+			target.set(output_properties[i], '')
 		else:
-			distance_field.get(target_resource).set(output_properties[i], output_glsl[i] % get_input_value(outputs_node, i))
+			target.set(output_properties[i], output_glsl[i] % get_input_value(outputs_node, i))
 
 func set_connections_active(active: bool) -> void:
 	var connections = get_connection_list()
