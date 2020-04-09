@@ -1,0 +1,55 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type spatial;
+render_mode blend_mix,depth_draw_alpha_prepass,cull_back,diffuse_burley,specular_schlick_ggx;
+
+varying mat4 world_matrix;
+
+void vertex() {
+	MODELVIEW_MATRIX = INV_CAMERA_MATRIX * mat4(CAMERA_MATRIX[0],CAMERA_MATRIX[1],CAMERA_MATRIX[2],WORLD_MATRIX[3]);
+	MODELVIEW_MATRIX = MODELVIEW_MATRIX * mat4(vec4(length(WORLD_MATRIX[0].xyz), 0.0, 0.0, 0.0),vec4(0.0, length(WORLD_MATRIX[1].xyz), 0.0, 0.0),vec4(0.0, 0.0, length(WORLD_MATRIX[2].xyz), 0.0),vec4(0.0, 0.0, 0.0, 1.0));
+	
+	world_matrix = WORLD_MATRIX;
+}
+
+bool ray_trace_sphere(vec3 o, vec3 d, float r) {
+    float a = 2.0 * dot(d, o);
+    float b = dot(o, o) - (r * r);
+	
+    if (a * a - 4.0 * b < 0.0) {
+        return false;
+    }
+	
+    return true;
+}
+
+void fragment() {
+	mat4 world_rotation = mat4(
+		world_matrix[0],
+		world_matrix[1],
+		world_matrix[2],
+		vec4(0, 0, 0, 1)
+	);
+	
+	mat4 camera_rotation = mat4(
+		CAMERA_MATRIX[0],
+		CAMERA_MATRIX[1],
+		CAMERA_MATRIX[2],
+		vec4(0, 0, 0, 1)
+	);
+	
+	vec3 ray_origin = -(inverse(world_rotation) * camera_rotation * INV_CAMERA_MATRIX * world_matrix[3]).xyz;
+    vec3 ray_normal = -(inverse(world_rotation) * camera_rotation * vec4(VIEW, 1.0)).xyz;
+	
+	if(ray_trace_sphere(ray_origin, ray_normal, 0.5)) {
+		ALPHA = 1.0;
+	}
+	else {
+		ALPHA = 0.0;
+	}
+}
+"
+
+[resource]
+shader = SubResource( 1 )

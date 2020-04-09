@@ -1,0 +1,33 @@
+[gd_resource type="Resource" load_steps=6 format=2]
+
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/glsl_parameter.gd" type="Script" id=1]
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/glsl_function.gd" type="Script" id=2]
+
+[sub_resource type="Resource" id=1]
+resource_name = "Position"
+script = ExtResource( 1 )
+name = "p"
+type = "vec3"
+
+[sub_resource type="Resource" id=2]
+resource_name = "Angle"
+script = ExtResource( 1 )
+name = "c"
+type = "vec2"
+
+[sub_resource type="Resource" id=3]
+resource_name = "Radius"
+script = ExtResource( 1 )
+name = "r"
+type = "float"
+
+[resource]
+resource_name = "Solid Angle"
+script = ExtResource( 2 )
+name = "dist_solid_angle"
+return_type = "float"
+params = [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ) ]
+implementation = "vec2 q = vec2(length(p.xz), p.y);
+float l = length(q) - r;
+float m = length(q - c * clamp(dot(q, c), 0.0, r));
+return max(l, m*sign(c.y * q.x - c.x * q.y));"

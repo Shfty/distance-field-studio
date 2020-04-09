@@ -1,0 +1,106 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type spatial;
+render_mode blend_mix,depth_draw_alpha_prepass,cull_back,diffuse_burley,specular_schlick_ggx;
+
+varying mat4 world_matrix;
+
+void vertex() {
+	MODELVIEW_MATRIX = INV_CAMERA_MATRIX * mat4(CAMERA_MATRIX[0],CAMERA_MATRIX[1],CAMERA_MATRIX[2],WORLD_MATRIX[3]);
+	MODELVIEW_MATRIX = MODELVIEW_MATRIX * mat4(vec4(length(WORLD_MATRIX[0].xyz), 0.0, 0.0, 0.0),vec4(0.0, length(WORLD_MATRIX[1].xyz), 0.0, 0.0),vec4(0.0, 0.0, length(WORLD_MATRIX[2].xyz), 0.0),vec4(0.0, 0.0, 0.0, 1.0));
+	
+	world_matrix = WORLD_MATRIX;
+}
+
+float sdf(vec3 p) {
+    return length(p) - 1.0;
+}
+
+float sphere_trace(vec3 o, vec3 d, vec3 view) {
+	float pixel_radius = fwidth(view.x);
+	
+	float omega = 1.4;
+	float t = 0.05;
+	float candidate_error = 1.0 / 0.0;
+	float candidate_t = 0.05;
+	float prev_radius = 0.0;
+	float step_length = 0.0;
+	float function_sign = sdf(o) < 0.0 ? -1.0 : 1.0;
+	
+	if(function_sign == -1.0) {
+		return 0.0;
+	}
+	
+	int i = 0;
+	for(i; i < 64; ++i) {
+		float signed_radius = function_sign * sdf(d * t + o);
+		float radius = abs(signed_radius);
+		bool sor_fail = omega > 1.0 && (radius + prev_radius) < step_length;
+		if(sor_fail) {
+			step_length -= omega * step_length;
+			omega = 1.0;
+		}
+		else {
+			step_length = signed_radius * omega;
+		}
+		
+		prev_radius = radius;
+		
+		float error = radius / t;
+		
+		if(!sor_fail && error < candidate_error) {
+			candidate_t = t;
+			candidate_error = error;
+		}
+		
+		if(!sor_fail && error < pixel_radius || t > 500.0) {
+			break;
+		}
+		
+		t += step_length;
+	}
+	
+	if(true)
+	{
+		if(candidate_error > pixel_radius) {
+			float max_error = pixel_radius + (pixel_radius);
+			if(candidate_error < max_error) {
+				return candidate_t;
+			}
+			else if(t > 500.0) {
+				return 1.0 / 0.0;
+			}
+		}
+	}
+	
+	return candidate_t;
+}
+
+void fragment() {
+	mat4 world_rotation = mat4(
+		world_matrix[0],
+		world_matrix[1],
+		world_matrix[2],
+		vec4(0, 0, 0, 1)
+	);
+	
+	mat4 camera_rotation = mat4(
+		CAMERA_MATRIX[0],
+		CAMERA_MATRIX[1],
+		CAMERA_MATRIX[2],
+		vec4(0, 0, 0, 1)
+	);
+	
+	vec3 ray_origin = -(inverse(world_rotation) * camera_rotation * INV_CAMERA_MATRIX * world_matrix[3]).xyz;
+    vec3 ray_normal = -(inverse(world_rotation) * camera_rotation * vec4(VIEW, 1.0)).xyz;
+	
+	float dist = sphere_trace(ray_origin, ray_normal, VIEW);
+	
+	ALBEDO = vec3(dist);
+	ALPHA = dist == (1.0 / 0.0) ? 0.0 : 1.0;
+}
+"
+
+[resource]
+shader = SubResource( 1 )

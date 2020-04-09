@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/distance_field_function.gd" type="Script" id=1]
+
+[resource]
+resource_name = "Solid Angle"
+script = ExtResource( 1 )
+signed_distance_function = "OUT_DISTANCE = dist_solid_angle(IN_POSITION, vec2(sin(radians(45.0)), cos(radians(45.0))), 1.0);"
+normal_function = "OUT_NORMAL = normal_approx(IN_POSITION, 0.001);"
+tangent_function = ""
+binormal_function = ""

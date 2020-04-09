@@ -1,0 +1,54 @@
+[gd_resource type="Resource" load_steps=5 format=2]
+
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/glsl_function.gd" type="Script" id=1]
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/glsl_parameter.gd" type="Script" id=2]
+
+
+
+
+
+[sub_resource type="Resource" id=1]
+resource_name = "Position"
+script = ExtResource( 2 )
+name = "p"
+type = "vec3"
+
+[sub_resource type="Resource" id=2]
+resource_name = "Plane"
+script = ExtResource( 2 )
+name = "n"
+type = "vec4"
+
+[resource]
+resource_name = "Quad SDF"
+script = ExtResource( 1 )
+name = "dist_quad"
+return_type = "float"
+params = [ SubResource( 1 ), SubResource( 2 ) ]
+implementation = "vec3 u, v;
+
+if(n.xyz == VEC3_Y) {
+	u = VEC3_X;
+	v = VEC3_Z;
+}
+else {
+	u = cross(n.xyz, VEC3_Y);
+	v = cross(n.xyz, VEC3_Z);
+}
+
+return max(
+	max(
+		max(
+			dist_plane(p, n),
+			dist_plane(p, n)
+		),
+		max(
+			dist_plane(p, vec4(u, 1.0)),
+			dist_plane(p, vec4(-u, 1.0))
+		)
+	),
+	max(
+		dist_plane(p, vec4(v, 1.0)),
+		dist_plane(p, vec4(-v, 1.0))
+	)
+);"

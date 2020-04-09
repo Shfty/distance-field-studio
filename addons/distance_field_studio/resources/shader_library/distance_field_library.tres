@@ -1,0 +1,46 @@
+[gd_resource type="Resource" load_steps=31 format=2]
+
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/shader_library.gd" type="Script" id=1]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/color_function/color_world.tres" type="Resource" id=2]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/signed_distance_function/3D/dist_heightmap.tres" type="Resource" id=3]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/modify_function/modify_round.tres" type="Resource" id=4]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/signed_distance_function/3D/dist_cube.tres" type="Resource" id=5]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/signed_distance_function/3D/dist_sphere.tres" type="Resource" id=6]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/signed_distance_function/3D/dist_torus.tres" type="Resource" id=7]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/normal_function/normal_plane.tres" type="Resource" id=8]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/normal_function/normal_sphere.tres" type="Resource" id=9]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/modify_function/modify_extrude.tres" type="Resource" id=10]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/normal_function/normal_approx.tres" type="Resource" id=11]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/modify_function/modify_elongate.tres" type="Resource" id=12]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/modify_function/modify_onion.tres" type="Resource" id=13]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/modify_function/modify_union.tres" type="Resource" id=14]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/modify_function/modify_subtraction.tres" type="Resource" id=15]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/modify_function/modify_intersection.tres" type="Resource" id=16]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/modify_function/modify_subtraction_smooth.tres" type="Resource" id=17]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/modify_function/modify_intersection_smooth.tres" type="Resource" id=18]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/modify_function/modify_union_smooth.tres" type="Resource" id=19]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/modify_function/modify_repeat.tres" type="Resource" id=20]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/modify_function/modify_repeat_limited.tres" type="Resource" id=21]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/modify_function/modify_mirror.tres" type="Resource" id=22]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/modify_function/modify_bend.tres" type="Resource" id=23]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/modify_function/modify_twist.tres" type="Resource" id=24]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/signed_distance_function/3D/dist_cone.tres" type="Resource" id=25]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/signed_distance_function/3D/dist_plane.tres" type="Resource" id=26]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/signed_distance_function/3D/dist_solid_angle.tres" type="Resource" id=27]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/modify_function/modify_revolve.tres" type="Resource" id=28]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/signed_distance_function/2D/dist_circle.tres" type="Resource" id=29]
+[ext_resource path="res://addons/distance_field_studio/resources/glsl_function/signed_distance_function/2D/dist_rect.tres" type="Resource" id=30]
+
+[resource]
+resource_name = "Distance Field Library"
+script = ExtResource( 1 )
+constants = {
+"VEC3_X": Vector3( 1, 0, 0 ),
+"VEC3_Y": Vector3( 0, 1, 0 ),
+"VEC3_Z": Vector3( 0, 0, 1 )
+}
+modify_functions = [ ExtResource( 14 ), ExtResource( 15 ), ExtResource( 16 ), ExtResource( 19 ), ExtResource( 17 ), ExtResource( 18 ), ExtResource( 4 ), ExtResource( 12 ), ExtResource( 13 ), ExtResource( 20 ), ExtResource( 21 ), ExtResource( 22 ), ExtResource( 24 ), ExtResource( 23 ), ExtResource( 10 ), ExtResource( 28 ) ]
+signed_distance_functions_3d = [ ExtResource( 6 ), ExtResource( 5 ), ExtResource( 26 ), ExtResource( 3 ), ExtResource( 25 ), ExtResource( 7 ), ExtResource( 27 ) ]
+signed_distance_functions_2d = [ ExtResource( 29 ), ExtResource( 30 ) ]
+normal_functions = [ ExtResource( 9 ), ExtResource( 8 ), ExtResource( 11 ) ]
+color_functions = [ ExtResource( 2 ) ]

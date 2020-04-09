@@ -1,0 +1,32 @@
+[gd_resource type="Resource" load_steps=5 format=2]
+
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/glsl_parameter.gd" type="Script" id=1]
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/glsl_function.gd" type="Script" id=2]
+
+
+
+[sub_resource type="Resource" id=1]
+resource_name = "Position"
+script = ExtResource( 1 )
+name = "p"
+type = "vec3"
+
+[sub_resource type="Resource" id=2]
+resource_name = "Bias"
+script = ExtResource( 1 )
+name = "h"
+type = "float"
+
+[resource]
+resource_name = "Approx Normal"
+script = ExtResource( 2 )
+name = "normal_approx"
+return_type = "vec3"
+params = [ SubResource( 1 ), SubResource( 2 ) ]
+implementation = "vec2 k = vec2(1,-1);
+return normalize(
+	k.xyy * sdf(p + k.xyy * h) +
+	k.yyx * sdf(p + k.yyx * h) +
+	k.yxy * sdf(p + k.yxy * h) +
+	k.xxx * sdf(p + k.xxx * h)
+);"

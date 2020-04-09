@@ -1,0 +1,28 @@
+[gd_resource type="Resource" load_steps=5 format=2]
+
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/glsl_parameter.gd" type="Script" id=1]
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/glsl_function.gd" type="Script" id=2]
+
+
+
+[sub_resource type="Resource" id=1]
+resource_name = "Position"
+script = ExtResource( 1 )
+name = "p"
+type = "vec3"
+
+[sub_resource type="Resource" id=2]
+resource_name = "Extents"
+script = ExtResource( 1 )
+name = "e"
+type = "vec3"
+
+[resource]
+resource_name = "Elongate"
+script = ExtResource( 2 )
+name = "modify_elongate"
+return_type = "vec3"
+params = [ SubResource( 1 ), SubResource( 2 ) ]
+implementation = "vec3 q = abs(p) - e;
+vec4 r = vec4(max(q, 0.0), min(max(q.x, max(q.y, q.z)), 0.0));
+return r.xyz;"

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/distance_field_function.gd" type="Script" id=1]
+
+[resource]
+resource_name = "Revolved Rect"
+script = ExtResource( 1 )
+signed_distance_function = "OUT_DISTANCE = dist_rect(modify_revolve(IN_POSITION, 1.0), vec2(0.5, 0.5));"
+normal_function = "OUT_NORMAL = normal_approx(IN_POSITION, 0.001);"
+tangent_function = ""
+binormal_function = ""

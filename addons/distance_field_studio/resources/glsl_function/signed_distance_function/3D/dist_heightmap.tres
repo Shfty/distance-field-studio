@@ -1,0 +1,43 @@
+[gd_resource type="Resource" load_steps=7 format=2]
+
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/glsl_parameter.gd" type="Script" id=1]
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/glsl_function.gd" type="Script" id=2]
+
+[sub_resource type="Resource" id=1]
+resource_name = "Position"
+script = ExtResource( 1 )
+name = "p"
+type = "vec3"
+
+[sub_resource type="Resource" id=2]
+resource_name = "Plane"
+script = ExtResource( 1 )
+name = "n"
+type = "vec4"
+
+[sub_resource type="Resource" id=3]
+resource_name = "UV"
+script = ExtResource( 1 )
+name = "uv"
+type = "vec2"
+
+[sub_resource type="Resource" id=4]
+resource_name = "Depth"
+script = ExtResource( 1 )
+name = "depth_tex"
+type = "sampler2D"
+
+[resource]
+resource_name = "Heightmap"
+script = ExtResource( 2 )
+name = "dist_heightmap"
+return_type = "float"
+params = [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ) ]
+implementation = "vec4 depth = texture(depth_tex, uv);
+float delta = 0.0;
+if(depth.a == 1.0 && uv.x > 0.0 && uv.y > 0.0 && uv.x < 1.0 && uv.y < 1.0) {
+	return dot(p, n.xyz) * 0.5 + depth.r - n.w;
+}
+else {
+	return dot(p, n.xyz);
+}"

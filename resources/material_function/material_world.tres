@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/material_function.gd" type="Script" id=1]
+
+[resource]
+resource_name = "World Material"
+script = ExtResource( 1 )
+color_function = "OUT_COLOR = color_world(IN_POSITION, IN_NORMAL);"
+metallic_function = "OUT_METALLIC = color_world(IN_POSITION, IN_NORMAL).x;"
+specular_function = "OUT_SPECULAR = color_world(IN_POSITION, IN_NORMAL).x;"
+roughness_function = "OUT_ROUGHNESS = color_world(IN_POSITION, IN_NORMAL).x;"
+emission_function = "OUT_EMISSION = color_world(IN_POSITION, IN_NORMAL).yzx * 0.025;"
+ao_function = "OUT_AO = color_world(IN_POSITION, IN_NORMAL).x;"
+ao_light_affect_function = "OUT_AO_LIGHT_AFFECT = color_world(IN_POSITION, IN_NORMAL).x;"

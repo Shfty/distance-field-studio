@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/distance_field_function.gd" type="Script" id=1]
+
+[resource]
+resource_name = "Sphere"
+script = ExtResource( 1 )
+signed_distance_function = "OUT_DISTANCE = dist_sphere(IN_POSITION, 1.0);"
+normal_function = "OUT_NORMAL = normal_sphere(IN_POSITION);"
+tangent_function = ""
+binormal_function = ""

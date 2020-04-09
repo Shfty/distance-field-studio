@@ -1,0 +1,33 @@
+[gd_resource type="Resource" load_steps=6 format=2]
+
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/glsl_parameter.gd" type="Script" id=1]
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/glsl_function.gd" type="Script" id=2]
+
+
+
+[sub_resource type="Resource" id=1]
+resource_name = "Distance A"
+script = ExtResource( 1 )
+name = "d1"
+type = "float"
+
+[sub_resource type="Resource" id=2]
+resource_name = "Distance B"
+script = ExtResource( 1 )
+name = "d2"
+type = "float"
+
+[sub_resource type="Resource" id=3]
+resource_name = "Transition"
+script = ExtResource( 1 )
+name = "k"
+type = "float"
+
+[resource]
+resource_name = "Smooth Subtraction"
+script = ExtResource( 2 )
+name = "modify_subtraction_smooth"
+return_type = "float"
+params = [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ) ]
+implementation = "float h = clamp(0.5 - 0.5 * (d2 + d1) / k, 0.0, 1.0);
+return mix(d2, -d1, h) + k * h * (1.0 - h);"

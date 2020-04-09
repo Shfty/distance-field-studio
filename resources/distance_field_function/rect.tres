@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/distance_field_function.gd" type="Script" id=1]
+
+[resource]
+resource_name = "Rect"
+script = ExtResource( 1 )
+signed_distance_function = "OUT_DISTANCE = modify_extrude(IN_POSITION, dist_rect(IN_POSITION.xy, vec2(1.0)), 0.001);"
+normal_function = "OUT_NORMAL = normal_approx(IN_POSITION, 0.001);"
+tangent_function = ""
+binormal_function = ""

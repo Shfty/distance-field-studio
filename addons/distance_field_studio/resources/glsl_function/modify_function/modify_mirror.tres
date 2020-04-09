@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=5 format=2]
+
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/glsl_parameter.gd" type="Script" id=1]
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/glsl_function.gd" type="Script" id=2]
+
+
+
+[sub_resource type="Resource" id=1]
+resource_name = "Position"
+script = ExtResource( 1 )
+name = "p"
+type = "vec3"
+
+[sub_resource type="Resource" id=2]
+resource_name = "Mirror"
+script = ExtResource( 1 )
+name = "m"
+type = "bvec3"
+
+[resource]
+resource_name = "Mirror Modifier"
+script = ExtResource( 2 )
+name = "modify_repeat"
+return_type = "float"
+params = [ SubResource( 1 ), SubResource( 2 ) ]
+implementation = "return mix(p, abs(p), m);"

@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[ext_resource path="res://addons/distance_field_studio/shaders/sphere_trace.shader" type="Shader" id=13]
+
+[resource]
+shader = ExtResource( 13 )
+shader_param/max_steps = 512
+shader_param/over_relax_factor = 1.4
+shader_param/anti_alias_gradient = 1.0
+shader_param/hollow = true
+shader_param/force_hit = false
+shader_param/draw_steps = false
+shader_param/step_min_color = Color( 1, 1, 1, 1 )
+shader_param/step_mid_color = Color( 0, 1, 0, 1 )
+shader_param/step_max_color = Color( 0, 0, 1, 1 )
+shader_param/continuity_iterations = 3
+shader_param/continuity_threshold = 0.001
