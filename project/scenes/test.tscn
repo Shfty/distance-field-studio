@@ -1,0 +1,446 @@
+[gd_scene format=2]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="GridContainer" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 756.0
+custom_constants/separation = 20
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Bool" type="VBoxContainer" parent="GridContainer"]
+margin_right = 100.0
+margin_bottom = 600.0
+custom_constants/separation = 10
+
+[node name="Label" type="Label" parent="GridContainer/Bool"]
+margin_right = 100.0
+margin_bottom = 14.0
+text = "Bool"
+
+[node name="DataTextureBool" type="TextureRect" parent="GridContainer/Bool"]
+margin_top = 24.0
+margin_right = 100.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 100, 10 )
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Byte" type="VBoxContainer" parent="GridContainer"]
+margin_left = 120.0
+margin_right = 220.0
+margin_bottom = 600.0
+custom_constants/separation = 10
+
+[node name="Label" type="Label" parent="GridContainer/Byte"]
+margin_right = 100.0
+margin_bottom = 14.0
+text = "Byte"
+
+[node name="DataTextureByteR" type="TextureRect" parent="GridContainer/Byte"]
+margin_top = 24.0
+margin_right = 100.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DataTextureByteRG" type="TextureRect" parent="GridContainer/Byte"]
+margin_top = 44.0
+margin_right = 100.0
+margin_bottom = 54.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DataTextureByteRGB" type="TextureRect" parent="GridContainer/Byte"]
+margin_top = 64.0
+margin_right = 100.0
+margin_bottom = 74.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DataTextureByteRGBA" type="TextureRect" parent="GridContainer/Byte"]
+margin_top = 84.0
+margin_right = 100.0
+margin_bottom = 94.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Int" type="VBoxContainer" parent="GridContainer"]
+margin_left = 240.0
+margin_right = 340.0
+margin_bottom = 600.0
+custom_constants/separation = 10
+
+[node name="Label6" type="Label" parent="GridContainer/Int"]
+margin_right = 100.0
+margin_bottom = 14.0
+text = "Int"
+
+[node name="DataTextureIntR" type="TextureRect" parent="GridContainer/Int"]
+margin_top = 24.0
+margin_right = 100.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DataTextureIntRG" type="TextureRect" parent="GridContainer/Int"]
+margin_top = 44.0
+margin_right = 100.0
+margin_bottom = 54.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DataTextureIntRGB" type="TextureRect" parent="GridContainer/Int"]
+margin_top = 64.0
+margin_right = 100.0
+margin_bottom = 74.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DataTextureIntRGBA" type="TextureRect" parent="GridContainer/Int"]
+margin_top = 84.0
+margin_right = 100.0
+margin_bottom = 94.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Float" type="VBoxContainer" parent="GridContainer"]
+margin_left = 360.0
+margin_right = 460.0
+margin_bottom = 600.0
+custom_constants/separation = 10
+
+[node name="Label2" type="Label" parent="GridContainer/Float"]
+margin_right = 100.0
+margin_bottom = 14.0
+text = "Float"
+
+[node name="DataTextureFloatR" type="TextureRect" parent="GridContainer/Float"]
+margin_top = 24.0
+margin_right = 100.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DataTextureFloatRG" type="TextureRect" parent="GridContainer/Float"]
+margin_top = 44.0
+margin_right = 100.0
+margin_bottom = 54.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DataTextureFloatRGB" type="TextureRect" parent="GridContainer/Float"]
+margin_top = 64.0
+margin_right = 100.0
+margin_bottom = 74.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DataTextureFloatRGBA" type="TextureRect" parent="GridContainer/Float"]
+margin_top = 84.0
+margin_right = 100.0
+margin_bottom = 94.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="String" type="VBoxContainer" parent="GridContainer"]
+margin_left = 480.0
+margin_right = 580.0
+margin_bottom = 600.0
+custom_constants/separation = 10
+
+[node name="Label2" type="Label" parent="GridContainer/String"]
+margin_right = 100.0
+margin_bottom = 14.0
+text = "String"
+
+[node name="DataTextureString" type="TextureRect" parent="GridContainer/String"]
+margin_top = 24.0
+margin_right = 100.0
+margin_bottom = 124.0
+rect_min_size = Vector2( 100, 100 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Vector2" type="VBoxContainer" parent="GridContainer"]
+margin_left = 600.0
+margin_right = 700.0
+margin_bottom = 600.0
+custom_constants/separation = 10
+
+[node name="Label3" type="Label" parent="GridContainer/Vector2"]
+margin_right = 100.0
+margin_bottom = 14.0
+text = "Vector2"
+
+[node name="DataTextureVector2" type="TextureRect" parent="GridContainer/Vector2"]
+margin_top = 24.0
+margin_right = 100.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Rect2" type="VBoxContainer" parent="GridContainer"]
+margin_left = 720.0
+margin_right = 820.0
+margin_bottom = 600.0
+custom_constants/separation = 10
+
+[node name="Label7" type="Label" parent="GridContainer/Rect2"]
+margin_right = 100.0
+margin_bottom = 14.0
+text = "Rect2"
+
+[node name="DataTextureRect2" type="TextureRect" parent="GridContainer/Rect2"]
+margin_top = 24.0
+margin_right = 100.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Transform2D" type="VBoxContainer" parent="GridContainer"]
+margin_left = 840.0
+margin_right = 940.0
+margin_bottom = 600.0
+custom_constants/separation = 10
+
+[node name="Label8" type="Label" parent="GridContainer/Transform2D"]
+margin_right = 100.0
+margin_bottom = 14.0
+text = "Transform2D"
+
+[node name="DataTextureTransform2D" type="TextureRect" parent="GridContainer/Transform2D"]
+margin_top = 24.0
+margin_right = 100.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Vector3" type="VBoxContainer" parent="GridContainer"]
+margin_left = 960.0
+margin_right = 1060.0
+margin_bottom = 600.0
+custom_constants/separation = 10
+
+[node name="Label4" type="Label" parent="GridContainer/Vector3"]
+margin_right = 100.0
+margin_bottom = 14.0
+text = "Vector3"
+
+[node name="DataTextureVector3" type="TextureRect" parent="GridContainer/Vector3"]
+margin_top = 24.0
+margin_right = 100.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AABB" type="VBoxContainer" parent="GridContainer"]
+margin_left = 1080.0
+margin_right = 1180.0
+margin_bottom = 600.0
+custom_constants/separation = 10
+
+[node name="Label9" type="Label" parent="GridContainer/AABB"]
+margin_right = 100.0
+margin_bottom = 14.0
+text = "AABB"
+
+[node name="DataTextureAABB" type="TextureRect" parent="GridContainer/AABB"]
+margin_top = 24.0
+margin_right = 100.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Basis" type="VBoxContainer" parent="GridContainer"]
+margin_left = 1200.0
+margin_right = 1300.0
+margin_bottom = 600.0
+custom_constants/separation = 10
+
+[node name="Label11" type="Label" parent="GridContainer/Basis"]
+margin_right = 100.0
+margin_bottom = 14.0
+text = "Basis"
+
+[node name="DataTextureBasis" type="TextureRect" parent="GridContainer/Basis"]
+margin_top = 24.0
+margin_right = 100.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Transform" type="VBoxContainer" parent="GridContainer"]
+margin_left = 1320.0
+margin_right = 1420.0
+margin_bottom = 600.0
+custom_constants/separation = 10
+
+[node name="Label10" type="Label" parent="GridContainer/Transform"]
+margin_right = 100.0
+margin_bottom = 14.0
+text = "Transform"
+
+[node name="DataTextureTransform" type="TextureRect" parent="GridContainer/Transform"]
+margin_top = 24.0
+margin_right = 100.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Color" type="VBoxContainer" parent="GridContainer"]
+margin_left = 1440.0
+margin_right = 1540.0
+margin_bottom = 600.0
+custom_constants/separation = 10
+
+[node name="Label5" type="Label" parent="GridContainer/Color"]
+margin_right = 100.0
+margin_bottom = 14.0
+text = "Color"
+
+[node name="DataTextureColor" type="TextureRect" parent="GridContainer/Color"]
+margin_top = 24.0
+margin_right = 100.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Plane" type="VBoxContainer" parent="GridContainer"]
+margin_left = 1560.0
+margin_right = 1660.0
+margin_bottom = 600.0
+custom_constants/separation = 10
+
+[node name="Label12" type="Label" parent="GridContainer/Plane"]
+margin_right = 100.0
+margin_bottom = 14.0
+text = "Plane"
+
+[node name="DataTexturePlane" type="TextureRect" parent="GridContainer/Plane"]
+margin_top = 24.0
+margin_right = 100.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Quat" type="VBoxContainer" parent="GridContainer"]
+margin_left = 1680.0
+margin_right = 1780.0
+margin_bottom = 600.0
+custom_constants/separation = 10
+
+[node name="Label13" type="Label" parent="GridContainer/Quat"]
+margin_right = 100.0
+margin_bottom = 14.0
+text = "Quat"
+
+[node name="DataTextureQuat" type="TextureRect" parent="GridContainer/Quat"]
+margin_top = 24.0
+margin_right = 100.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 100, 10 )
+expand = true
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}

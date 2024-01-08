@@ -491,6 +491,7 @@ func get_output_constant(node: GraphNode) -> Array:
 					type_string,
 					String(value[0]).pad_decimals(1),
 					String(value[1]).pad_decimals(1),
-					String(value[2]).pad_decimals(1)
+					String(value[2]).pad_decimals(1),
+					String(value[3]).pad_decimals(1)
 				]
 	return [value]

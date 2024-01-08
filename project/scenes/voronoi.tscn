@@ -1,0 +1,80 @@
+[gd_scene load_steps=6 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+float voronoi( in vec2 x )
+{
+    vec2 p = floor(x);
+    vec2 f = fract(x);
+
+    float res = 8.0;
+    for(int j=-1; j<=1; j++)
+    for(int i=-1; i<=1; i++)
+    {
+        vec2 b = vec2(ivec2( i, j ));
+        vec2  r = vec2(b) - f + rand(p + b);
+        float d = dot( r, r );
+
+        res = min( res, d );
+    }
+    return sqrt( res );
+}
+
+void fragment() {
+	COLOR = vec4(vec3(voronoi(UV * 10.0)), 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+
+[sub_resource type="QuadMesh" id=3]
+size = Vector2( 5, 5 )
+
+[sub_resource type="Shader" id=4]
+code = "shader_type canvas_item;
+
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+float smoothVoronoi( in vec2 x )
+{
+    vec2 p = floor( x );
+    vec2  f = fract( x );
+
+    float res = 0.0;
+    for( int j=-1; j<=1; j++ )
+    for( int i=-1; i<=1; i++ )
+    {
+        vec2 b = vec2(ivec2( i, j ));
+        vec2  r = vec2( b ) - f + rand( p + b );
+        float d = dot( r, r );
+
+        res += 1.0/pow( d, 8.0 );
+    }
+    return pow( 1.0/res, 1.0/16.0 );
+}
+
+void fragment() {
+	COLOR = vec4(vec3(smoothVoronoi(UV * 10.0)), 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = SubResource( 4 )
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Voronoi" type="MeshInstance2D" parent="."]
+material = SubResource( 2 )
+position = Vector2( -3, 0 )
+mesh = SubResource( 3 )
+
+[node name="SmoothVoronoi" type="MeshInstance2D" parent="."]
+material = SubResource( 5 )
+position = Vector2( 3, 0 )
+mesh = SubResource( 3 )

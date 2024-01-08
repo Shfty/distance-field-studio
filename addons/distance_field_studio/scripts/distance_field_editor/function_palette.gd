@@ -39,11 +39,9 @@ func populate_function_list() -> void:
 	populate_vector_make_operators(vbox, "Make Vector", DistanceFieldUtil.GLSL_VECTOR_TYPES)
 	populate_vector_break_operators(vbox, "Break Vector", DistanceFieldUtil.GLSL_VECTOR_TYPES)
 
-	populate_glsl_functions(vbox, "3D Signed Distance Functions", shader_library.signed_distance_functions_3d)
-	populate_glsl_functions(vbox, "2D Signed Distance Functions", shader_library.signed_distance_functions_2d)
-	populate_glsl_functions(vbox, "Modifier Functions", shader_library.modify_functions)
-	populate_glsl_functions(vbox, "Normal Functions", shader_library.normal_functions)
-	populate_glsl_functions(vbox, "Color Functions", shader_library.color_functions)
+	for function_category in shader_library.function_category_names:
+		var category_name = shader_library.function_category_names[function_category]
+		populate_glsl_functions(vbox, category_name, shader_library.functions[function_category])
 
 func create_category_control(parent: Control, title: String) -> Array:
 	var popup_menu = Panel.new()

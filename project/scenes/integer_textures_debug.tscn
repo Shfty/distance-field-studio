@@ -1,0 +1,34 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://project/scripts/testing/integer_textures.gd" type="Script" id=1]
+[ext_resource path="res://project/materials/shaders/integer_textures.shader" type="Shader" id=2]
+
+[sub_resource type="Image" id=4]
+data = {
+"data": PoolByteArray( 23, 10, 20, 30, 40, 50, 60, 70, 80, 10, 100, 110 ),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 3
+}
+
+[sub_resource type="ImageTexture" id=5]
+flags = 0
+flags = 0
+image = SubResource( 4 )
+size = Vector2( 3, 1 )
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = ExtResource( 2 )
+shader_param/sampler2d = SubResource( 5 )
+
+[sub_resource type="QuadMesh" id=3]
+size = Vector2( 5, 5 )
+
+[node name="Node2D" type="Node2D"]
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+material = SubResource( 6 )
+mesh = SubResource( 3 )
+script = ExtResource( 1 )
+integers = PoolByteArray( 23, 10, 20, 30, 40, 50, 60, 70, 80, 10, 100, 110 )

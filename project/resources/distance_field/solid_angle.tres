@@ -1,0 +1,349 @@
+[gd_resource type="Resource" load_steps=9 format=2]
+
+[ext_resource path="res://addons/distance_field_studio/shaders/sphere_trace.shader" type="Shader" id=1]
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/sphere_trace_params.gd" type="Script" id=2]
+[ext_resource path="res://addons/distance_field_studio/resources/shader_library/distance_field_library.tres" type="Resource" id=3]
+[ext_resource path="res://addons/distance_field_studio/scripts/distance_field/distance_field.gd" type="Script" id=4]
+[ext_resource path="res://project/resources/distance_field_function/solid_angle.tres" type="Resource" id=5]
+[ext_resource path="res://project/resources/material_function/material_world.tres" type="Resource" id=6]
+
+
+[sub_resource type="Shader" id=21]
+code = "shader_type spatial;
+render_mode blend_mix,depth_draw_alpha_prepass,cull_back,diffuse_burley,specular_schlick_ggx;
+
+const float INFINITY = 1.0 / 0.0;
+
+// Generated constants
+const vec3 VEC3_X = vec3(1, 0, 0);
+const vec3 VEC3_Y = vec3(0, 1, 0);
+const vec3 VEC3_Z = vec3(0, 0, 1);
+
+
+// Sphere tracing parameters
+
+uniform int max_steps: hint_range(1, 1024) = 128;
+uniform float over_relax_factor: hint_range(1,2) = 1.4;
+uniform float anti_alias_gradient: hint_range(0,16) = 1.0;
+uniform bool hollow = true;
+uniform bool force_hit = false;
+
+uniform bool draw_steps = false;
+uniform vec4 step_min_color: hint_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform vec4 step_mid_color: hint_color = vec4(0.5, 0.5, 0.5, 1.0);
+uniform vec4 step_max_color: hint_color = vec4(1.0, 1.0, 1.0, 1.0);
+
+// Continuity parameters
+uniform int continuity_iterations: hint_range(0, 16) = 3;
+uniform float continuity_threshold: hint_range(0.001, 1) = 0.001;
+
+// Generated uniforms
+
+
+varying float near_plane;
+varying float far_plane;
+varying float instance_count;
+varying vec2 texel_size;
+
+varying mat4 world_matrix;
+varying mat4 inverse_world_matrix;
+varying mat3 world_basis;
+varying mat3 inverse_world_basis;
+
+varying mat4 camera_matrix;
+varying mat3 camera_basis;
+varying mat3 inverse_camera_basis;
+
+varying mat4 inverse_projection_matrix;
+
+varying float fov;
+varying float aspect;
+
+// Generated SDF library
+
+float dist_solid_angle(vec3 p, vec2 c, float r) {
+	vec2 q = vec2(length(p.xz), p.y);
+	float l = length(q) - r;
+	float m = length(q - c * clamp(dot(q, c), 0.0, r));
+	return max(l, m*sign(c.y * q.x - c.x * q.y));
+}
+
+// Generated signed distance function
+float sdf(vec3 IN_POSITION) {
+	float OUT_DISTANCE;
+	OUT_DISTANCE = dist_solid_angle(IN_POSITION, vec2(sin(radians(45.0)), cos(radians(45.0))), 1.0);
+	return OUT_DISTANCE;
+}
+
+// Generated normal library
+vec3 normal_approx(vec3 p, float h) {
+	vec2 k = vec2(1,-1);
+	return normalize(
+		k.xyy * sdf(p + k.xyy * h) +
+		k.yyx * sdf(p + k.yyx * h) +
+		k.yxy * sdf(p + k.yxy * h) +
+		k.xxx * sdf(p + k.xxx * h)
+	);
+}
+
+// Generated normal function
+vec3 normal(vec3 IN_POSITION) {
+	vec3 OUT_NORMAL;
+	OUT_NORMAL = normal_approx(IN_POSITION, 0.001);
+	return OUT_NORMAL;
+}
+
+vec3 tangent(vec3 IN_POSITION) {
+	vec3 OUT_TANGENT;
+	
+	return OUT_TANGENT;
+}
+
+vec3 binormal(vec3 IN_POSITION) {
+	vec3 OUT_BINORMAL;
+	
+	return OUT_BINORMAL;
+}
+
+// Generated color library
+vec4 color_world(vec3 p, vec3 n) {
+	return vec4(mod(p, 1.0), 1.0);
+}
+
+// Generated color functions
+vec4 color(vec3 IN_POSITION, vec3 IN_NORMAL, vec3 IN_TANGENT, vec3 IN_BINORMAL) {
+	vec4 OUT_COLOR = vec4(1);
+	OUT_COLOR = color_world(IN_POSITION, IN_NORMAL);
+	return OUT_COLOR;
+}
+
+float metallic(vec3 IN_POSITION, vec3 IN_NORMAL, vec3 IN_TANGENT, vec3 IN_BINORMAL) {
+	float OUT_METALLIC = 0.0;
+	OUT_METALLIC = color_world(IN_POSITION, IN_NORMAL).x;
+	return OUT_METALLIC;
+}
+
+float specular(vec3 IN_POSITION, vec3 IN_NORMAL, vec3 IN_TANGENT, vec3 IN_BINORMAL) {
+	float OUT_SPECULAR = 0.5;
+	OUT_SPECULAR = color_world(IN_POSITION, IN_NORMAL).x;
+	return OUT_SPECULAR;
+}
+
+float roughness(vec3 IN_POSITION, vec3 IN_NORMAL, vec3 IN_TANGENT, vec3 IN_BINORMAL) {
+	float OUT_ROUGHNESS = 1.0;
+	OUT_ROUGHNESS = color_world(IN_POSITION, IN_NORMAL).x;
+	return OUT_ROUGHNESS;
+}
+
+vec3 emission(vec3 IN_POSITION, vec3 IN_NORMAL, vec3 IN_TANGENT, vec3 IN_BINORMAL) {
+	vec3 OUT_EMISSION = vec3(0);
+	OUT_EMISSION = color_world(IN_POSITION, IN_NORMAL).yzx * 0.025;
+	return OUT_EMISSION;
+}
+
+float ao(vec3 IN_POSITION, vec3 IN_NORMAL, vec3 IN_TANGENT, vec3 IN_BINORMAL) {
+	float OUT_AO = 1.0;
+	OUT_AO = color_world(IN_POSITION, IN_NORMAL).x;
+	return OUT_AO;
+}
+
+float ao_light_affect(vec3 IN_POSITION, vec3 IN_NORMAL, vec3 IN_TANGENT, vec3 IN_BINORMAL) {
+	float OUT_AO_LIGHT_AFFECT = 0.0;
+	OUT_AO_LIGHT_AFFECT = color_world(IN_POSITION, IN_NORMAL).x;
+	return OUT_AO_LIGHT_AFFECT;
+}
+
+void generate_perspective_rays(in vec3 view, out vec3 ray_origin, out vec3 ray_normal, out float pixel_radius) {
+	ray_origin = inverse_world_basis * (camera_matrix[3].xyz - world_matrix[3].xyz);
+    ray_normal = inverse_world_basis * camera_basis * view;
+	pixel_radius = length(fwidth(view));
+}
+
+void generate_orthographic_rays(in vec2 screen_uv, out vec3 ray_origin, out vec3 ray_normal, out float pixel_radius) {
+	vec3 view_origin = (inverse_projection_matrix * vec4(screen_uv * 2.0 - 1.0, 0.0, 1.0)).xyz;
+	ray_origin = (inverse_world_matrix * camera_matrix * vec4(view_origin, 1.0)).xyz;
+    ray_normal = inverse_world_basis * camera_basis * vec3(0, 0, 1);
+	pixel_radius = length(fwidth(ray_origin));
+}
+
+void sphere_trace(in vec3 o, in vec3 d, in float pixel_radius, out float dist, out float steps, out float hit) {
+	float omega = over_relax_factor;
+	float t = near_plane;
+	float candidate_error = INFINITY;
+	float candidate_t = near_plane;
+	float prev_radius = 0.0;
+	float step_length = 0.0;
+	float function_sign = sdf(o) < 0.0 ? -1.0 : 1.0;
+	
+	if(!hollow && function_sign == -1.0) {
+		dist = t;
+		hit = 1.0;
+		return
+	}
+	
+	int i = 0;
+	for(i; i < max_steps; ++i) {
+		float signed_radius = function_sign * sdf(d * t + o);
+		float radius = abs(signed_radius);
+		bool sor_fail = omega > 1.0 && (radius + prev_radius) < step_length;
+		if(sor_fail) {
+			step_length -= omega * step_length;
+			omega = 1.0;
+		}
+		else {
+			step_length = signed_radius * omega;
+		}
+		
+		prev_radius = radius;
+		
+		float error = radius / t;
+		
+		if(!sor_fail && error < candidate_error) {
+			candidate_t = t;
+			candidate_error = error;
+		}
+		
+		if(!sor_fail && error < pixel_radius || t > far_plane) {
+			break;
+		}
+		
+		t += step_length;
+	}
+	
+	if(!force_hit)
+	{
+		if(candidate_error > pixel_radius) {
+			float max_error = pixel_radius + (pixel_radius * anti_alias_gradient);
+			if(candidate_error < max_error) {
+				dist = candidate_t;
+				steps = float(i);
+				hit = smoothstep(max_error, pixel_radius, candidate_error);
+				return
+			}
+			else if(t > far_plane) {
+				return;
+			}
+		}
+	}
+	
+	dist = candidate_t;
+	steps = float(i);
+	hit = 1.0;
+}
+
+vec3 continuity(vec3 p, vec3 o, vec3 d, int it, float t) {
+	for(int i = 0; i < it; ++i) {
+		p = p + d * (abs(sdf(p)) - length(p - o) * t);
+	}
+	return p;
+}
+
+void vertex() {
+	near_plane = 0.05;
+	far_plane = 500.0;
+	
+	world_matrix = WORLD_MATRIX;
+	inverse_world_matrix = inverse(WORLD_MATRIX);
+	world_basis = mat3(WORLD_MATRIX);
+	inverse_world_basis = inverse(world_basis);
+	
+	camera_matrix = CAMERA_MATRIX;
+	camera_basis = mat3(CAMERA_MATRIX);
+	inverse_camera_basis = inverse(camera_basis);
+	
+	inverse_projection_matrix = INV_PROJECTION_MATRIX;
+	
+	fov = 2.0 * atan(1.0 / PROJECTION_MATRIX[1][1]);
+	aspect = PROJECTION_MATRIX[1][1] / PROJECTION_MATRIX[0][0];
+}
+
+void fragment() {
+	vec3 ray_origin, ray_normal;
+	float pixel_radius;
+	
+	if(PROJECTION_MATRIX[3][3] == 0.0) {
+		generate_perspective_rays(-VIEW, ray_origin, ray_normal, pixel_radius);
+	}
+	else {
+		generate_orthographic_rays(SCREEN_UV, ray_origin, ray_normal, pixel_radius);
+	}
+	
+	float dist = INFINITY;
+	float steps = 0.0;
+	float hit = 0.0;
+	sphere_trace(ray_origin, ray_normal, pixel_radius, dist, steps, hit);
+	
+	vec3 pos = ray_origin + ray_normal * dist;
+	pos = continuity(pos, ray_origin, ray_normal, continuity_iterations, continuity_threshold);
+	
+	vec3 normal = normal(pos);
+	vec3 view_normal = inverse_camera_basis * world_basis * normal;
+    NORMAL = view_normal;
+	
+	vec3 tangent = tangent(pos);
+	vec3 view_tangent = inverse_camera_basis * world_basis * tangent;
+	TANGENT = tangent;
+	
+	vec3 binormal = binormal(pos);
+	vec3 view_binormal = inverse_camera_basis * world_basis * binormal;
+	BINORMAL = binormal;
+	
+	if(draw_steps) {
+		float step_factor = steps / float(max_steps);
+		vec3 step_color;
+		if(step_factor <= 0.5) {
+			step_color = mix(step_min_color.xyz, step_mid_color.xyz, step_factor * 2.0f);
+		}
+		else {
+			step_color = mix(step_mid_color.xyz, step_max_color.xyz, step_factor);
+		}
+		ALBEDO = vec3(0.0);
+		EMISSION = step_color;
+	}
+	else {
+		vec4 color = color(pos, normal, tangent, binormal);
+		ALBEDO = color.rgb;
+		ALPHA = color.a;
+		
+		METALLIC = metallic(pos, normal, tangent, binormal);
+		SPECULAR = specular(pos, normal, tangent, binormal);
+		ROUGHNESS = roughness(pos, normal, tangent, binormal);
+		EMISSION = emission(pos, normal, tangent, binormal);
+		AO = ao(pos, normal, tangent, binormal);
+		AO_LIGHT_AFFECT = ao_light_affect(pos, normal, tangent, binormal);
+	}
+	
+	ALPHA *= hit;
+	
+	vec4 clip_pos = PROJECTION_MATRIX * INV_CAMERA_MATRIX * world_matrix * vec4(pos, 1.0);
+	DEPTH = clip_pos.z / clip_pos.w * 0.5 + 0.5;
+}
+"
+
+[sub_resource type="Resource" id=22]
+script = ExtResource( 2 )
+max_steps = 128
+over_relax_factor = 1.4
+anti_alias_gradient = 1.0
+hollow = true
+force_hit = false
+continuity_iterations = 3
+continuity_threshold = 0.001
+draw_steps = false
+step_min_color = Color( 0, 0, 0, 1 )
+step_mid_color = Color( 0.66, 0.66, 0.66, 1 )
+step_max_color = Color( 1, 1, 1, 1 )
+
+[resource]
+resource_name = "Solid Angle"
+script = ExtResource( 4 )
+update = false
+base_shader = ExtResource( 1 )
+shader_library = ExtResource( 3 )
+distance_field_function = ExtResource( 5 )
+material_function = ExtResource( 6 )
+generated_shader = SubResource( 21 )
+shader_params = SubResource( 22 )
+uniforms = {
+
+}

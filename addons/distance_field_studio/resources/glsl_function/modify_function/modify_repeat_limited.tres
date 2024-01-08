@@ -3,8 +3,6 @@
 [ext_resource path="res://addons/distance_field_studio/scripts/distance_field/glsl_parameter.gd" type="Script" id=1]
 [ext_resource path="res://addons/distance_field_studio/scripts/distance_field/glsl_function.gd" type="Script" id=2]
 
-
-
 [sub_resource type="Resource" id=1]
 resource_name = "Position"
 script = ExtResource( 1 )
@@ -24,7 +22,7 @@ name = "l"
 type = "vec3"
 
 [resource]
-resource_name = "Limited Repeat Modifier"
+resource_name = "Limited Repeat"
 script = ExtResource( 2 )
 name = "modify_repeat_limited"
 return_type = "float"

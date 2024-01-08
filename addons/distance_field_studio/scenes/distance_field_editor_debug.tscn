@@ -2,7 +2,7 @@
 
 [ext_resource path="res://addons/distance_field_studio/resources/theme/debug_theme.tres" type="Theme" id=1]
 [ext_resource path="res://addons/distance_field_studio/scenes/distance_field_editor.tscn" type="PackedScene" id=2]
-[ext_resource path="res://resources/distance_field/debug_test.tres" type="Resource" id=3]
+[ext_resource path="res://project/resources/distance_field/debug_test.tres" type="Resource" id=3]
 
 [node name="Spatial" type="Control"]
 anchor_right = 1.0

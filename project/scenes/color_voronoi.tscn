@@ -1,0 +1,73 @@
+[gd_scene load_steps=4 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+const float INFINITY = 1.0 / 0.0;
+
+void vertex() {
+	UV = VERTEX;
+}
+
+float dist(vec2 uv, vec2 pos, float r) {
+	return length(uv - pos) - r;
+}
+
+void fragment() {
+	vec2 positions[6] = {
+		vec2(-0.5, -0.7),
+		vec2(0, -1),
+		vec2(0.4, -0.2),
+		vec2(-1.0, 0.5),
+		vec2(0, 1),
+		vec2(1, 1.0)
+	};
+	
+	vec3 from_colors[6] = {
+		vec3(1, 0, 0),
+		vec3(0, 1, 0),
+		vec3(0, 0, 1),
+		vec3(1, 1, 0),
+		vec3(0, 1, 1),
+		vec3(1, 0, 1)
+	};
+	
+	vec3 to_colors[6] = {
+		vec3(0, 1, 1),
+		vec3(1, 0, 1),
+		vec3(1, 1, 0),
+		vec3(0, 0, 1),
+		vec3(1, 0, 0),
+		vec3(0, 1, 0)
+	};
+	
+	float min_dist = INFINITY;
+	for(int i = 0; i < 6; ++i) {
+		min_dist = min(min_dist, dist(UV, positions[i], 1.0));
+	}
+	
+	float frag_size = length(fwidth(UV));
+	float step_size = max(0.2, frag_size);
+	vec3 color = vec3(0);
+	for(int i = 0; i < 6; ++i) {
+		float dist = dist(UV, positions[i], 1.0);
+		float delta = dist - min_dist;
+		float k = smoothstep(step_size, 0.0, delta);
+		color += from_colors[i] * k;
+	}
+	
+	COLOR = vec4(color, 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+
+[sub_resource type="QuadMesh" id=3]
+size = Vector2( 10, 10 )
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Voronoi" type="MeshInstance2D" parent="."]
+material = SubResource( 2 )
+scale = Vector2( 20, 20 )
+mesh = SubResource( 3 )
